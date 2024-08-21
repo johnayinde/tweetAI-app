@@ -24,10 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  //   Post.associate = (models) => {
-  //     Post.belongsTo(models.Autobot, {foreignKey: "autobotId", as: "autobot"});
-  //     Post.hasMany(models.Comment, {as: "comments", foreignKey: "postId"});
-  //   };
-
   return Post;
 };

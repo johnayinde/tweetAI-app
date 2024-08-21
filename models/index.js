@@ -17,13 +17,13 @@ db.sequelize = sequelize;
 
 // Load models
 db.Autobot = require("./autbot")(sequelize, Sequelize);
-db.Post = require("./post")(sequelize, Sequelize);
 db.Comment = require("./comment")(sequelize, Sequelize);
+db.Post = require("./post")(sequelize, Sequelize);
 
 // Associations
-db.Autobot.hasMany(db.Post, {as: "posts"});
-db.Post.belongsTo(db.Autobot, {foreignKey: "autobotId", as: "autobot"});
-db.Post.hasMany(db.Comment, {as: "comments"});
-db.Comment.belongsTo(db.Post, {foreignKey: "postId", as: "post"});
+db.Autobot.hasMany(db.Post, {foreignKey: "autobotId"});
+db.Post.belongsTo(db.Autobot, {foreignKey: "autobotId"});
+db.Post.hasMany(db.Comment, {foreignKey: "postId"});
+db.Comment.belongsTo(db.Post, {foreignKey: "postId"});
 
 module.exports = db;

@@ -28,9 +28,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  //   Comment.associate = (models) => {
-  //     Comment.belongsTo(models.Post, {foreignKey: "postId", as: "post"});
-  //   };
-
   return Comment;
 };

@@ -25,9 +25,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  // Autobot.associate = (models) => {
-  //   Autobot.hasMany(models.Post, {as: "posts", foreignKey: "autobotId"});
-  // };
-
   return Autobot;
 };
