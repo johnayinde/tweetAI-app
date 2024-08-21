@@ -1,7 +1,7 @@
 const cron = require("node-cron");
-const autbotService = require("../services/autbotService");
-const postService = require("../services/postService");
-const commentService = require("../services/commentService");
+const autbotService = require("./services/autbotService");
+const postService = require("./services/postService");
+const commentService = require("./services/commentService");
 
 // Schedule tasks to be run on the server
 cron.schedule("*/5 * * * *", async () => {
@@ -20,8 +20,11 @@ cron.schedule("*/5 * * * *", async () => {
       "https://jsonplaceholder.typicode.com/comments"
     );
 
-    // Iterate through users and create Autobots
-    for (const user of users) {
+    // Limit to 500 Autobots
+    const selectedUsers = users.slice(0, 500);
+
+    // Iterate through selected users and create Autobots
+    for (const user of selectedUsers) {
       const autobot = await autbotService.createAutobot({
         name: user.name,
         username: user.username,
@@ -29,8 +32,14 @@ cron.schedule("*/5 * * * *", async () => {
         phone: user.phone,
       });
 
-      // Find related posts for this Autobot
-      const userPosts = posts.filter((post) => post.userId === user.id);
+      // Find related posts for this Autobot and ensure 10 unique titles
+      const userPosts = posts
+        .filter((post) => post.userId === user.id)
+        .slice(0, 10)
+        .map((post, index) => ({
+          ...post,
+          title: `${post.title} - Unique ${index + 1}`,
+        }));
 
       // Create Posts
       for (const post of userPosts) {
@@ -40,10 +49,10 @@ cron.schedule("*/5 * * * *", async () => {
           autobotId: autobot.id,
         });
 
-        // Find related comments for this Post
-        const postComments = comments.filter(
-          (comment) => comment.postId === post.id
-        );
+        // Find related comments for this Post and limit to 10 comments
+        const postComments = comments
+          .filter((comment) => comment.postId === post.id)
+          .slice(0, 10);
 
         // Create Comments
         for (const comment of postComments) {
