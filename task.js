@@ -1,15 +1,26 @@
-const cron = require("node-cron");
 const autbotService = require("./services/autbotService");
 const postService = require("./services/postService");
 const commentService = require("./services/commentService");
+const axios = require("axios");
 
-// Schedule tasks to be run on the server
-cron.schedule("*/5 * * * *", async () => {
+// Function to generate a random string of given length
+function generateRandomString(length) {
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    result += charset[randomIndex];
+  }
+  return result;
+}
+
+// Scheduler function to be run on the server
+async function generateAutobots() {
   console.log("Running a task every 5 minutes");
 
   try {
     // Fetch data from jsonplaceholder.typicode.com
-    const axios = require("axios");
     const {data: users} = await axios.get(
       "https://jsonplaceholder.typicode.com/users"
     );
@@ -21,44 +32,38 @@ cron.schedule("*/5 * * * *", async () => {
     );
 
     // Limit to 500 Autobots
-    const selectedUsers = users.slice(0, 500);
-
-    // Iterate through selected users and create Autobots
-    for (const user of selectedUsers) {
+    for (let i = 0; i < 5; i++) {
+      let user = users[i % users.length];
+      const username = `${user.username}_${generateRandomString(10)}`;
+      const email = `${user.name}_${generateRandomString(7)}@tweetai.com`;
       const autobot = await autbotService.createAutobot({
         name: user.name,
-        username: user.username,
-        email: user.email,
+        username,
+        email,
         phone: user.phone,
       });
 
-      // Find related posts for this Autobot and ensure 10 unique titles
-      const userPosts = posts
-        .filter((post) => post.userId === user.id)
-        .slice(0, 10)
-        .map((post, index) => ({
-          ...post,
-          title: `${post.title} - Unique ${index + 1}`,
-        }));
+      for (let j = 0; j < 5; j++) {
+        const postIndex = (i * 5 + j) % posts.length;
+        const post = posts[postIndex];
+        const title = `${post.title} - Unique ${generateRandomString(10)}`;
 
-      // Create Posts
-      for (const post of userPosts) {
         const createdPost = await postService.createPost({
-          title: post.title,
+          title,
           body: post.body,
           autobotId: autobot.id,
         });
 
-        // Find related comments for this Post and limit to 10 comments
-        const postComments = comments
-          .filter((comment) => comment.postId === post.id)
-          .slice(0, 10);
+        for (let k = 0; k < 5; k++) {
+          const commentIndex = (postIndex * 5 + k) % comments.length;
+          const comment = comments[commentIndex];
+          const email = `${comment.name}_${generateRandomString(
+            7
+          )}@tweetai.com`;
 
-        // Create Comments
-        for (const comment of postComments) {
           await commentService.createComment({
             name: comment.name,
-            email: comment.email,
+            email,
             body: comment.body,
             postId: createdPost.id,
           });
@@ -70,4 +75,6 @@ cron.schedule("*/5 * * * *", async () => {
   } catch (error) {
     console.error("Error in scheduled task:", error);
   }
-});
+}
+
+module.exports = {generateAutobots};
