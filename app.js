@@ -7,10 +7,6 @@ const autbotRoutes = require("./routes/autbotRoutes");
 const postRoutes = require("./routes/postRoutes");
 const db = require("./models");
 const {generateAutobots} = require("./task");
-// check all comments
-// cors
-// proper namings/file structures
-// Frontemd
 const app = express();
 
 // Middlewares
@@ -23,8 +19,6 @@ app.use("/api/posts", postRoutes);
 
 // Schedule the generateAutobots function to run every 1 hour
 cron.schedule("0 * * * *", generateAutobots); //1hr
-
-// cron.schedule("*/20 * * * * *", generateAutobots); //20sec
 
 // cron.schedule("*/3 * * * *", generateAutobots); // 2min
 

@@ -5,4 +5,8 @@ const pagination = (req) => {
   return {offset, limit, page};
 };
 
-module.exports = {pagination};
+const infoLog = (message) => {
+  console.info(`[${new Date().toISOString()}] ${message}`);
+};
+
+module.exports = {pagination, infoLog};
