@@ -1,5 +1,5 @@
 const db = require("../models");
-const {pagination} = require("../util/");
+const {pagination} = require("../util");
 
 exports.getAutobots = async (req, res) => {
   try {
