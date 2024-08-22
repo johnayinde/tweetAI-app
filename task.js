@@ -38,6 +38,7 @@ async function generateAutobots() {
       const email = `${user.name}_${generateRandomString(
         5
       )}@tweetai.com`.toLowerCase();
+      console.log(`Processing Autobot... ${i + 1}`);
 
       const autobot = await autbotService.createAutobot({
         name: user.name,
@@ -47,7 +48,7 @@ async function generateAutobots() {
       });
 
       for (let j = 0; j < 10; j++) {
-        const postIndex = (i * 5 + j) % posts.length;
+        const postIndex = (i * 10 + j) % posts.length;
         const post = posts[postIndex];
         const title = `${post.title} - Unique ${generateRandomString(10)}`;
 

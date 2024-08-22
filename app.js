@@ -5,12 +5,9 @@ const cron = require("node-cron");
 const rateLimiter = require("./config/rateLimiter");
 const autbotRoutes = require("./routes/autbotRoutes");
 const postRoutes = require("./routes/postRoutes");
-const commentRoutes = require("./routes/commentRoutes");
 const db = require("./models");
 const {generateAutobots} = require("./task");
 // check all comments
-// proper RESTful routes
-// Test paginations
 // cors
 // proper namings/file structures
 // Frontemd
@@ -19,18 +16,33 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(rateLimiter); // Apply rate limiting
+
 // Routes
 app.use("/api/autobots", autbotRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
 
 // Schedule the generateAutobots function to run every 1 hour
-// cron.schedule("0 * * * *", generateAutobots);
+cron.schedule("0 * * * *", generateAutobots); //1hr
 
-cron.schedule("*/20 * * * * *", generateAutobots);
+// cron.schedule("*/20 * * * * *", generateAutobots); //20sec
+
+// cron.schedule("*/3 * * * *", generateAutobots); // 2min
+
+// 404 Error handler for undefined routes
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
+// General error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({error: "Something went wrong!"});
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
 });
 
 db.sequelize

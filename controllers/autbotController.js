@@ -28,17 +28,19 @@ exports.getAutobotPosts = async (req, res) => {
       offset,
       limit,
     });
-    const totalPosts = await db.Post.count();
+
+    const totalPosts = await db.Post.findAll({
+      where: {autobotId: req.params.id},
+    });
 
     if (!posts) return res.status(404).json({error: "Autobot not found"});
     res.json({
       posts,
       currentPage: page,
       perPage: posts.length,
-      totalPosts,
+      totalPosts: totalPosts.length,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({error: "Failed to fetch posts for this Autobot"});
   }
 };
