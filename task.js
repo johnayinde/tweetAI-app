@@ -32,10 +32,13 @@ async function generateAutobots() {
     );
 
     // Limit to 500 Autobots
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 500; i++) {
       let user = users[i % users.length];
       const username = `${user.username}_${generateRandomString(10)}`;
-      const email = `${user.name}_${generateRandomString(7)}@tweetai.com`;
+      const email = `${user.name}_${generateRandomString(
+        5
+      )}@tweetai.com`.toLowerCase();
+
       const autobot = await autbotService.createAutobot({
         name: user.name,
         username,
@@ -43,7 +46,7 @@ async function generateAutobots() {
         phone: user.phone,
       });
 
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < 10; j++) {
         const postIndex = (i * 5 + j) % posts.length;
         const post = posts[postIndex];
         const title = `${post.title} - Unique ${generateRandomString(10)}`;
@@ -54,12 +57,12 @@ async function generateAutobots() {
           autobotId: autobot.id,
         });
 
-        for (let k = 0; k < 5; k++) {
-          const commentIndex = (postIndex * 5 + k) % comments.length;
+        for (let k = 0; k < 10; k++) {
+          const commentIndex = (postIndex * 10 + k) % comments.length;
           const comment = comments[commentIndex];
           const email = `${comment.name}_${generateRandomString(
-            7
-          )}@tweetai.com`;
+            5
+          )}@tweetai.com`.toLowerCase();
 
           await commentService.createComment({
             name: comment.name,

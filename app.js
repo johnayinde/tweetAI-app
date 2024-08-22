@@ -8,7 +8,12 @@ const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const db = require("./models");
 const {generateAutobots} = require("./task");
-
+// check all comments
+// proper RESTful routes
+// Test paginations
+// cors
+// proper namings/file structures
+// Frontemd
 const app = express();
 
 // Middlewares
@@ -20,9 +25,9 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 
 // Schedule the generateAutobots function to run every 1 hour
-cron.schedule("0 * * * *", generateAutobots);
+// cron.schedule("0 * * * *", generateAutobots);
 
-// cron.schedule("*/10 * * * * *", generateAutobots);
+cron.schedule("*/20 * * * * *", generateAutobots);
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({error: "Something went wrong!"});

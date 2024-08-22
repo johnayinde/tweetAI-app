@@ -21,12 +21,22 @@ exports.getAutobots = async (req, res) => {
 
 exports.getAutobotPosts = async (req, res) => {
   try {
-    const autobot = await db.Autobot.findByPk(req.params.id, {
-      include: [{model: db.Post, as: "Posts", limit: 10}],
-    });
+    const {offset, limit, page} = pagination(req);
 
-    if (!autobot) return res.status(404).json({error: "Autobot not found"});
-    res.json(autobot.Posts);
+    const posts = await db.Post.findAll({
+      where: {autobotId: req.params.id},
+      offset,
+      limit,
+    });
+    const totalPosts = await db.Post.count();
+
+    if (!posts) return res.status(404).json({error: "Autobot not found"});
+    res.json({
+      posts,
+      currentPage: page,
+      perPage: posts.length,
+      totalPosts,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({error: "Failed to fetch posts for this Autobot"});
