@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cron = require("node-cron");
 const http = require("http");
+const cors = require("cors");
 
 const rateLimiter = require("./config/rateLimiter");
 const autbotRoutes = require("./routes/autbotRoutes");
@@ -19,7 +20,6 @@ const io = socketIo(server, {
     credentials: true,
   },
 });
-const cors = require("cors");
 
 // Middlewares
 app.use(express.json());
@@ -73,7 +73,7 @@ app.use((err, req, res, next) => {
 });
 
 db.sequelize
-  .sync({alter: true})
+  .sync({alter: false})
   .then(() => {
     console.log("Database synchronized");
   })

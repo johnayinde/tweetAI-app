@@ -7,7 +7,8 @@
 
 <script>
 import io from "socket.io-client";
-const socket = io("http://localhost:9000/");
+const SERVER_URL = "http://localhost:9000/";
+const socket = io(SERVER_URL);
 
 export default {
   data() {
