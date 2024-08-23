@@ -10,9 +10,11 @@ exports.getAutobots = async (req, res) => {
 
     res.json({
       autobots,
-      currentPage: page,
-      perPage: autobots.length,
-      totalAutobots,
+      pagination: {
+        currentPage: page,
+        perPage: autobots.length,
+        totalAutobots,
+      },
     });
   } catch (error) {
     res.status(500).json({error: "Failed to fetch Autobots"});
@@ -24,21 +26,23 @@ exports.getAutobotPosts = async (req, res) => {
     const {offset, limit, page} = pagination(req);
 
     const posts = await db.Post.findAll({
-      where: {autobotId: req.params.id},
+      where: {autobotId: req.params.botId},
       offset,
       limit,
     });
 
     const totalPosts = await db.Post.findAll({
-      where: {autobotId: req.params.id},
+      where: {autobotId: req.params.botId},
     });
 
     if (!posts) return res.status(404).json({error: "Autobot not found"});
     res.json({
       posts,
-      currentPage: page,
-      perPage: posts.length,
-      totalPosts: totalPosts.length,
+      pagination: {
+        currentPage: page,
+        perPage: posts.length,
+        totalPosts: totalPosts.length,
+      },
     });
   } catch (error) {
     res.status(500).json({error: "Failed to fetch posts for this Autobot"});

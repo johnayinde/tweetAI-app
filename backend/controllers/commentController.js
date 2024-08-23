@@ -16,9 +16,11 @@ exports.getComment = async (req, res) => {
       return res.status(404).json({error: "Post comments not found"});
     res.json({
       comments,
-      currentPage: page,
-      perPage: posts.length,
-      totalComments,
+      pagination: {
+        currentPage: page,
+        perPage: posts.length,
+        totalComments,
+      },
     });
   } catch (error) {
     res.status(500).json({error: "Failed to fetch the post comments"});

@@ -4,6 +4,6 @@ const autbotController = require("../controllers/autbotController");
 
 // Routes
 router.get("/", autbotController.getAutobots);
-router.get("/:id/posts", autbotController.getAutobotPosts);
+router.get("/:botId/posts", autbotController.getAutobotPosts);
 
 module.exports = router;
