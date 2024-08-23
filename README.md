@@ -130,8 +130,7 @@ The Autobot API provides a set of RESTful endpoints to manage Autobots, their po
         "username": "johndoe",
         "email": "john@example.com",
         "phone": "123-456-7890"
-      },
-      ...
+      }
     ],
     "pagination": {
       "page": 1,
@@ -168,8 +167,7 @@ The Autobot API provides a set of RESTful endpoints to manage Autobots, their po
         "title": "Post Title",
         "body": "Post body content...",
         "autobotId": 1
-      },
-      ...
+      }
     ],
     "pagination": {
       "page": 1,
@@ -207,8 +205,7 @@ The Autobot API provides a set of RESTful endpoints to manage Autobots, their po
         "email": "commenter@example.com",
         "body": "Comment content...",
         "postId": 1
-      },
-      ...
+      }
     ],
     "pagination": {
       "page": 1,
