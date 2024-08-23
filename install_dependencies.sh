@@ -25,10 +25,10 @@ install_backend() {
     echo "Installing backend packages..."
     if [ -d "$BACKEND_DIR" ]; then
         cd "$BACKEND_DIR" || exit
-        if [ -f "requirements.txt" ]; then
-            pip install -r requirements.txt
+        if [ -f "package.json" ]; then
+            npm install
         else
-            echo "No requirements.txt found in $BACKEND_DIR"
+            echo "No package.json found in $BACKEND_DIR"
         fi
         cd ..
     else
